@@ -24,11 +24,28 @@ namespace PagSeguroApi.Controllers
             try
             {
                 SessionResponse retorno = await sessionService.Obter(sessionRequest);
-                return new ObjectResult(retorno);
+                Response response = new Response
+                {
+                    Status = "success",
+                    Message = "ID da sessão obtido com sucesso",
+                    Error = false,
+                    Data = retorno
+                };
+
+                return new ObjectResult(response);
             }
             catch (Exception e)
             {
-                return BadRequest(new { Mensagem = e.Message, Error = true });
+                Response response = new Response
+                {
+                    Status = "error",
+                    Message = e.Message,
+                    Error = true,
+                    Data = null
+
+                };
+                //return StatusCode(500, response);
+                return BadRequest(response);
             }
             
         }
