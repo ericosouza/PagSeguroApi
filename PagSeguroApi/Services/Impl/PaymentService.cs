@@ -2,13 +2,9 @@
 using PagSeguroApi.Services.Interface;
 using PagSeguroApi.Util;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
 using System.Net;
 using System.Text;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 
 namespace PagSeguroApi.Services
 {
@@ -16,15 +12,22 @@ namespace PagSeguroApi.Services
     {
         public string BoletoCheckout(BoletoRequest boletoRequest)
         {
-            throw new NotImplementedException();
+            return Checkout(ResolverInformacao(boletoRequest));
         }
 
         public string CreditCardCheckout(CreditCardRequest creditCardRequest)
         {
+            return Checkout(ResolverInformacao(creditCardRequest));
+        }
+
+        public string DebitoOnlineCheckout(DebitoOnlineRequest debitoOnlineRequest)
+        {
+            return Checkout(ResolverInformacao(debitoOnlineRequest));
+        }
+
+        private string Checkout(NameValueCollection nameValueCollection)
+        {
             string url = UrlEndpoint.URL_WS_DEV_PAGSEGURO + UrlEndpoint.PATH_PAYMENT;
-
-            NameValueCollection nameValueCollection = ResolverInformacao(creditCardRequest);
-
             string retornoTransacao = null;
 
             using (WebClient webClient = new WebClient())
@@ -39,7 +42,7 @@ namespace PagSeguroApi.Services
                     retornoTransacao = Encoding.ASCII.GetString(result);
                     return retornoTransacao;
                 }
-                catch(WebException e)
+                catch (WebException e)
                 {
 
                     throw;
@@ -52,12 +55,17 @@ namespace PagSeguroApi.Services
             }
         }
 
-        public string DebitoOnlineCheckout(DebitoOnlineRequest debitoOnlineRequest)
+        private NameValueCollection ResolverInformacao(BoletoRequest boletoRequest)
         {
             throw new NotImplementedException();
         }
 
         private NameValueCollection ResolverInformacao(CreditCardRequest creditCardRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        private NameValueCollection ResolverInformacao(DebitoOnlineRequest debitoOnlineRequest)
         {
             throw new NotImplementedException();
         }
